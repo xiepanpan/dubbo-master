@@ -240,7 +240,9 @@ public class RegistryProtocol implements Protocol {
     
     @SuppressWarnings("unchecked")
 	public <T> Invoker<T> refer(Class<T> type, URL url) throws RpcException {
+        //url registry://192.168.2.11
         url = url.setProtocol(url.getParameter(Constants.REGISTRY_KEY, Constants.DEFAULT_REGISTRY)).removeParameter(Constants.REGISTRY_KEY);
+        //获得注册中心 zookeeperRegister
         Registry registry = registryFactory.getRegistry(url);
         if (RegistryService.class.equals(type)) {
         	return proxyFactory.getInvoker((T) registry, type, url);
@@ -255,6 +257,7 @@ public class RegistryProtocol implements Protocol {
                 return doRefer( getMergeableCluster(), registry, type, url );
             }
         }
+        //cluster=Cluster$Adaptive
         return doRefer(cluster, registry, type, url);
     }
     
@@ -263,10 +266,14 @@ public class RegistryProtocol implements Protocol {
     }
     
     private <T> Invoker<T> doRefer(Cluster cluster, Registry registry, Class<T> type, URL url) {
+        //对多个invoke进行组装
         RegistryDirectory<T> directory = new RegistryDirectory<T>(type, url);
+        //ZookeeperRegister
         directory.setRegistry(registry);
         directory.setProtocol(protocol);
+        //url=consumer：//192.168.11.222
         URL subscribeUrl = new URL(Constants.CONSUMER_PROTOCOL, NetUtils.getLocalHost(), 0, type.getName(), directory.getUrl().getParameters());
+        //把consumer：//192...注册到注册中心
         if (! Constants.ANY_VALUE.equals(url.getServiceInterface())
                 && url.getParameter(Constants.REGISTER_KEY, true)) {
             registry.register(subscribeUrl.addParameters(Constants.CATEGORY_KEY, Constants.CONSUMERS_CATEGORY,

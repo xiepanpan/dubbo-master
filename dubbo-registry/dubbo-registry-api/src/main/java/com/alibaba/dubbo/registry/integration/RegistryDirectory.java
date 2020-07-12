@@ -130,6 +130,7 @@ public class RegistryDirectory<T> extends AbstractDirectory<T> implements Notify
     
     public void subscribe(URL url) {
         setConsumerUrl(url);
+        //registry=ZookeeperRegistry consumer://  this:RegistryDirectory
         registry.subscribe(url, this);
     }
 

@@ -441,11 +441,14 @@ public abstract class AbstractRegistry implements Registry {
             notified.putIfAbsent(url, new ConcurrentHashMap<String, List<URL>>());
             categoryNotified = notified.get(url);
         }
+        //对provider、configuration、routers路径下进行notify 拿到地址缓存起来
+        //第一次调用 后续的watch机制通知
         for (Map.Entry<String, List<URL>> entry : result.entrySet()) {
             String category = entry.getKey();
             List<URL> categoryList = entry.getValue();
             categoryNotified.put(category, categoryList);
             saveProperties(url);
+            //RegistryDirectory的notify
             listener.notify(categoryList);
         }
     }

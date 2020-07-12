@@ -389,6 +389,7 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
             }
 
             if (urls.size() == 1) {
+                //获得invoke代理对象 invoke=MockClusterInvoker
                 invoker = refprotocol.refer(interfaceClass, urls.get(0));
             } else {
                 List<Invoker<?>> invokers = new ArrayList<Invoker<?>>();

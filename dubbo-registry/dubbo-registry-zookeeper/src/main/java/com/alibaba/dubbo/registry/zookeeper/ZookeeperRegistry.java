@@ -112,6 +112,7 @@ public class ZookeeperRegistry extends FailbackRegistry {
 
     protected void doSubscribe(final URL url, final NotifyListener listener) {
         try {
+            //com.xiepanpan.IXPHello
             if (Constants.ANY_VALUE.equals(url.getServiceInterface())) {
                 String root = toRootPath();
                 ConcurrentMap<NotifyListener, ChildListener> listeners = zkListeners.get(url);
@@ -147,6 +148,7 @@ public class ZookeeperRegistry extends FailbackRegistry {
                 }
             } else {
                 List<URL> urls = new ArrayList<URL>();
+                //循环地址
                 for (String path : toCategoriesPath(url)) {
                     ConcurrentMap<NotifyListener, ChildListener> listeners = zkListeners.get(url);
                     if (listeners == null) {
@@ -163,6 +165,7 @@ public class ZookeeperRegistry extends FailbackRegistry {
                         zkListener = listeners.get(listener);
                     }
                     zkClient.create(path, false);
+                    //watch
                     List<String> children = zkClient.addChildListener(path, zkListener);
                     if (children != null) {
                     	urls.addAll(toUrlsWithEmpty(url, path, children));
