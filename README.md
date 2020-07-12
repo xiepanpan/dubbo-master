@@ -201,3 +201,16 @@ cd ../bin
     http://root:root@127.0.0.1:8080
 ```
 
+## 模块
+
+admin 控制台
+cluster 集群
+common 公共
+config  当前配置文件解析
+container 容器
+filter  过滤器
+monitor 监控
+registry 注册中心
+remoting 远程调用
+rpc  rpc协议
+simple simple 监控中心

@@ -296,14 +296,17 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             host = provider.getHost();
         }
         boolean anyhost = false;
+        //1.从配置文件中获取host
         if (NetUtils.isInvalidLocalHost(host)) {
             anyhost = true;
             try {
+                //2.从网卡获取本地地址
                 host = InetAddress.getLocalHost().getHostAddress();
             } catch (UnknownHostException e) {
                 logger.warn(e.getMessage(), e);
             }
             if (NetUtils.isInvalidLocalHost(host)) {
+                //3.从注册中心中获取
                 if (registryURLs != null && registryURLs.size() > 0) {
                     for (URL registryURL : registryURLs) {
                         try {
@@ -324,6 +327,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                     }
                 }
                 if (NetUtils.isInvalidLocalHost(host)) {
+                    //4.遍历本地网卡，返回第一个合理的IP
                     host = NetUtils.getLocalHost();
                 }
             }
