@@ -250,6 +250,7 @@ public class DubboProtocol extends AbstractProtocol {
             }
         }
 
+        //暴露服务
         openServer(url);
         
         return exporter;
@@ -263,6 +264,7 @@ public class DubboProtocol extends AbstractProtocol {
         if (isServer) {
         	ExchangeServer server = serverMap.get(key);
         	if (server == null) {
+        	    //没有的话就创建服务
         		serverMap.put(key, createServer(url));
         	} else {
         		//server支持reset,配合override功能使用
@@ -284,6 +286,7 @@ public class DubboProtocol extends AbstractProtocol {
         url = url.addParameter(Constants.CODEC_KEY, Version.isCompatibleVersion() ? COMPATIBLE_CODEC_NAME : DubboCodec.NAME);
         ExchangeServer server;
         try {
+            //绑定服务
             server = Exchangers.bind(url, requestHandler);
         } catch (RemotingException e) {
             throw new RpcException("Fail to start server(url: " + url + ") " + e.getMessage(), e);

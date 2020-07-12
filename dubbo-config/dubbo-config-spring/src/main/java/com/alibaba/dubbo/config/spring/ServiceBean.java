@@ -247,6 +247,7 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
             }
         }
         if (! isDelay()) {
+            //服务的发布和注册
             export();
         }
     }

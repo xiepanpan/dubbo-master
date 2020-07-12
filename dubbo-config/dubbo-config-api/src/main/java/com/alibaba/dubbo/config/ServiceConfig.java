@@ -58,6 +58,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
     private static final long   serialVersionUID = 3033787999037024738L;
 
+    //Protocol$Adaptive.java
     private static final Protocol protocol = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
     
     private static final ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
@@ -242,6 +243,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         if (path == null || path.length() == 0) {
             path = interfaceName;
         }
+        //这里
         doExportUrls();
     }
 
@@ -478,6 +480,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 }
                 if (registryURLs != null && registryURLs.size() > 0
                         && url.getParameter("register", true)) {
+                    //拿到所有url 循环
                     for (URL registryURL : registryURLs) {
                         url = url.addParameterIfAbsent("dynamic", registryURL.getParameter("dynamic"));
                         URL monitorUrl = loadMonitor(registryURL);
@@ -487,9 +490,12 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                         if (logger.isInfoEnabled()) {
                             logger.info("Register dubbo service " + interfaceClass.getName() + " url " + url + " to registry " + registryURL);
                         }
+                        //通过proxyFactory来获取Invoker对象
                         Invoker<?> invoker = proxyFactory.getInvoker(ref, (Class) interfaceClass, registryURL.addParameterAndEncoded(Constants.EXPORT_KEY, url.toFullString()));
 
+                        //注册服务
                         Exporter<?> exporter = protocol.export(invoker);
+                        //将exporter添加到list中
                         exporters.add(exporter);
                     }
                 } else {

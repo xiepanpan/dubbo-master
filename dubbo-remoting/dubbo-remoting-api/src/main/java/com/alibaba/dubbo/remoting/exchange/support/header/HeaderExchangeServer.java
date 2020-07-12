@@ -75,6 +75,7 @@ public class HeaderExchangeServer implements ExchangeServer {
         if (heartbeatTimeout < heartbeat * 2) {
             throw new IllegalStateException("heartbeatTimeout < heartbeatInterval * 2");
         }
+        //心跳
         startHeatbeatTimer();
     }
     
@@ -232,8 +233,10 @@ public class HeaderExchangeServer implements ExchangeServer {
     }
 
     private void startHeatbeatTimer() {
+        //关闭心跳定时
         stopHeartbeatTimer();
         if (heartbeat > 0) {
+            //每隔heartbeat时间执行一次
             heatbeatTimer = scheduled.scheduleWithFixedDelay(
                     new HeartBeatTask( new HeartBeatTask.ChannelProvider() {
                         public Collection<Channel> getChannels() {
